@@ -27,7 +27,7 @@ import { Fabricante, FabricanteSchema } from './entities/fabricante.entity';
       {
         name: Fabricante.name,
         schema: FabricanteSchema,
-      },
+      }
     ]),
   ],
   controllers: [

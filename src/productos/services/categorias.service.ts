@@ -16,12 +16,12 @@ export class CategoriasService {
     return this.categoriaModel.find().exec();
   }
 
-  findOne(id: string) {
-    const category = this.categoriaModel.find((item) => item.id === id);
-    if (!category) {
+  async findOne(id: string) {
+    const categoria = await this.categoriaModel.findById(id).exec();
+    if (!categoria) {
       throw new NotFoundException(`Categoria #${id} not found`);
     }
-    return category;
+    return categoria;
   }
 
   create(data: CreateCategoriaDto) {

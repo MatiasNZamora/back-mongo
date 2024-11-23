@@ -6,6 +6,7 @@ import { ProductosModule } from 'src/productos/productos.module';
 import { CompradoresController } from './controllers/compradores.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Comprador, CompradorSchema } from './entities/comprador.entity';
+import { Operador, OperadorSchema } from './entities/operador.entity';
 
 @Module({
   imports: [
@@ -14,6 +15,10 @@ import { Comprador, CompradorSchema } from './entities/comprador.entity';
       {
         name: Comprador.name,
         schema: CompradorSchema,
+      },
+      {
+        name: Operador.name,
+        schema: OperadorSchema,
       },
     ]),
   ],

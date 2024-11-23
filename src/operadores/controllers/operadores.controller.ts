@@ -6,12 +6,13 @@ import {
   Body,
   Put,
   Delete,
-  ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 
 import { OperadoresService } from '../services/operadores.service';
 import { CreateOperadorDto, UpdateOperadorDto } from '../dtos/operador.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 
 @ApiTags('Operadores')
 @Controller('operadores')
@@ -24,12 +25,12 @@ export class OperadoresController {
   }
 
   @Get(':id')
-  get(@Param('id', ParseIntPipe) id: number) {
+  get(@Param('id', MongoIdPipe) id: string) {
     return this.operadoresService.findOne(id);
   }
 
   @Get(':id/pedidos')
-  getOrders(@Param('id', ParseIntPipe) id: number) {
+  getOrders(@Param('id', MongoIdPipe) id: string) {
     return this.operadoresService.getOrderByUser(id);
   }
 
@@ -38,16 +39,16 @@ export class OperadoresController {
     return this.operadoresService.create(payload);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateOperadorDto,
   ) {
     return this.operadoresService.update(id, payload);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.operadoresService.remove(+id);
+  remove(@Param('id', MongoIdPipe) id: string) {
+    return this.operadoresService.remove(id);
   }
 }

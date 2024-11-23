@@ -3,12 +3,12 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateCategoriaDto {
   
-  @ApiProperty()
+  @ApiProperty({description: 'Nombre de la - Categoria'})
   @IsString()
   @IsNotEmpty()
   readonly nombre: string;
 
-  @ApiProperty()
+  @ApiProperty({description: 'Imagen de la - Categoria'})
   @IsNotEmpty()
   @IsUrl()
   @IsOptional()

@@ -17,7 +17,7 @@ export class CompradoresService {
   }
 
   async findOne( id: string ) {
-    const customer = this.compradorModel.findById(id);
+    const customer = await this.compradorModel.findById(id).exec();
     if (!customer) {
       throw new NotFoundException(`Comprador #${id} not found`);
     }
@@ -25,7 +25,6 @@ export class CompradoresService {
   }
 
   create(data: CreateCompradorDto) {
-    // console.log(data);
     const newModel = new this.compradorModel(data);
     return newModel.save();
   }

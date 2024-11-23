@@ -6,70 +6,59 @@ import { Pedido } from '../entities/pedido.entity';
 import { CreateOperadorDto, UpdateOperadorDto } from '../dtos/operador.dto';
 
 import { ProductosService } from './../../productos/services/productos.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class OperadoresService {
   constructor(
+    @InjectModel( Operador.name ) private OperadorModel: Model<Operador>,
     private productsService: ProductosService,
-    //@Inject('APIKEY') private apiKey: string, // GLobalModule DATABASE - podemos utilizar el servicio sin necesidad de importarlo
     private configService: ConfigService, // Ya no utilizamos la variable global
   ) {}
 
-  private counterId = 1;
-  private operadores: Operador[] = [
-    {
-      id: 1,
-      email: 'operador@correo.com',
-      password: '123456',
-      role: 'admin',
-    },
-  ];
+  // private counterId = 1;
+  // private operadores: Operador[] = [
+  //   {
+  //     id: 1,
+  //     email: 'operador@correo.com',
+  //     password: '123456',
+  //     role: 'admin',
+  //   },
+  // ];
 
   findAll() {
-    const apiKey = this.configService.get('APIKEY');
-    const dbname = this.configService.get('DB_NAME');
-    console.log(apiKey, dbname);
-    return this.operadores;
+    return this.OperadorModel.find().exec();
   }
 
-  findOne(id: number) {
-    const user = this.operadores.find((item) => item.id === id);
-    if (!user) {
-      throw new NotFoundException(`User #${id} not found`);
+  async findOne(id: string) {
+    const operador = await this.OperadorModel.findById(id).exec();
+    if (!operador) {
+      throw new NotFoundException(`Operador #${id} not found`);
     }
-    return user;
-  }
+    return operador;
+  } 
 
   create(data: CreateOperadorDto) {
-    this.counterId = this.counterId + 1;
-    const newUser = {
-      id: this.counterId,
-      ...data,
-    };
-    this.operadores.push(newUser);
-    return newUser;
+    const newOperador = new this.OperadorModel(data);
+    return newOperador.save();
   }
 
-  update(id: number, changes: UpdateOperadorDto) {
-    const user = this.findOne(id);
-    const index = this.operadores.findIndex((item) => item.id === id);
-    this.operadores[index] = {
-      ...user,
-      ...changes,
-    };
-    return this.operadores[index];
-  }
-
-  remove(id: number) {
-    const index = this.operadores.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`User #${id} not found`);
+  update(id: string, changes: UpdateOperadorDto) {
+    const operador = this.OperadorModel
+      .findByIdAndUpdate( id, {$set: changes}, {new: true} )
+      .exec()
+    if (!operador) {
+      throw new NotFoundException(`Comprador #${id} not found`);
     }
-    this.operadores.splice(index, 1);
-    return true;
+    return operador;
   }
 
-  async getOrderByUser(id: number) {
+  remove(id: string) {
+    return this.OperadorModel.findByIdAndDelete(id);
+  }
+
+  async getOrderByUser(id: string) {
     const user = this.findOne(id);
     return {
       date: new Date(),

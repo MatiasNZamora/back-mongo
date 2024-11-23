@@ -15,7 +15,7 @@ import { CreateCategoriaDto } from './categoria.dto';
 
 
 export class CreateProductDTO {
-  @ApiProperty()
+  @ApiProperty({description: 'Nombre del producto' })
   @IsString()
   @IsNotEmpty()
   readonly nombre: string; //solo lectura

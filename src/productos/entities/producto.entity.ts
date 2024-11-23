@@ -5,6 +5,7 @@ import { Fabricante } from './fabricante.entity';
 
 @Schema()
 export class Producto extends Document {
+  
   @Prop({ required: true, unique: true })
   nombre: string;
 
@@ -33,7 +34,6 @@ export class Producto extends Document {
 
   @Prop({ type: Types.ObjectId, ref: Fabricante.name })
   fabricante: Fabricante | Types.ObjectId;
-
 
 }
 
