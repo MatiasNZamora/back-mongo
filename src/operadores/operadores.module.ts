@@ -7,6 +7,8 @@ import { CompradoresController } from './controllers/compradores.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Comprador, CompradorSchema } from './entities/comprador.entity';
 import { Operador, OperadorSchema } from './entities/operador.entity';
+import { Pedido, PedidoSchema } from './entities/pedido.entity';
+import { DetallePedido, DetallePedidoSchema } from './entities/detalle-pedido.entity';
 
 @Module({
   imports: [
@@ -19,6 +21,14 @@ import { Operador, OperadorSchema } from './entities/operador.entity';
       {
         name: Operador.name,
         schema: OperadorSchema,
+      },
+      {
+        name: Pedido.name,
+        schema: PedidoSchema,
+      },
+      {
+        name: DetallePedido.name,
+        schema: DetallePedidoSchema,
       },
     ]),
   ],
