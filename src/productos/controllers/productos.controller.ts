@@ -6,30 +6,32 @@ import {
   Body,
   Put,
   Delete,
-  HttpStatus,
-  HttpCode,
-  Res,
   Query,
-  //ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ProductosService } from '../services/productos.service';
-import { ParseIntPipe } from '../../common/parse-int.pipe';
-import {
-  CreateProductDTO,
-  FilterProductsDto,
-  UpdateProductDTO,
-} from '../dtos/productos.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateProductDTO, FilterProductsDto, UpdateProductDTO } from '../dtos/productos.dto';
 
 import { MongoIdPipe } from './../../common/mongo-id.pipe';
 
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/roles.model';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+
+//TODO: FIXEAR EL JWTOKEN no me reconoce el token.
+
+// @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Productos')
 @Controller('productos')
 export class ProductosController {
   constructor(private productsService: ProductosService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Registros de productos' })
   getProducts(@Query() params: FilterProductsDto) {
@@ -48,6 +50,7 @@ export class ProductosController {
     return this.productsService.findOne(productId);
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   create(@Body() payload: CreateProductDTO) {
     return this.productsService.create(payload);
@@ -61,6 +64,7 @@ export class ProductosController {
     return this.productsService.update(id, payload);
   }
 
+  @Roles(Role.ADMIN)
   @Delete(':id')
   delete(@Param('id', MongoIdPipe) id: string) {
     return this.productsService.remove(id);

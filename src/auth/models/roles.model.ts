@@ -1,4 +1,4 @@
-export interface PayloadRoles {
-    role:string;
-    sub:number
+export enum Role {
+    COMPRADOR = 'comprador',
+    ADMIN = 'admin',
 };
