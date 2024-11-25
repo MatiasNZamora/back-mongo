@@ -50,7 +50,7 @@ export class CreateProductDTO {
 
   @ApiProperty({description: 'Imagen detallada del producto'})
   @IsNotEmpty()
-  @ValidateNested()
+  @ValidateNested() // valida el dto envevido.
   readonly categoria: CreateCategoriaDto;
 
   @ApiProperty({description: 'ID - fabricante del producto'})
@@ -60,9 +60,7 @@ export class CreateProductDTO {
   
 }
 
-export class UpdateProductDTO extends PartialType(
-  OmitType(CreateProductDTO, ['nombre']),
-) {}
+export class UpdateProductDTO extends PartialType( OmitType( CreateProductDTO, ['nombre'] ) ){}
 
 export class FilterProductsDto {
   @ApiProperty({description: 'Filtro numerico que delimita el limite de items'})

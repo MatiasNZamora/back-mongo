@@ -30,10 +30,10 @@ export class Producto extends Document {
       imagen: { type: String },
     }),
   )
-  categoria: Record<string, any>; // Propiedad de tipo sub documento.
+  categoria: Record<string, any>; // Propiedad de tipo subdocumento.
 
-  @Prop({ type: Types.ObjectId, ref: Fabricante.name })
-  fabricante: Fabricante | Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: Fabricante.name }) // definimos la relacion 
+  fabricante: Fabricante | Types.ObjectId; // campo nuevo en productos
 
 }
 

@@ -1,13 +1,26 @@
-import { ApiProperty, PartialType } from "@nestjs/swagger";
-import { IsNotEmpty, IsPositive } from "class-validator";
+import { ApiProperty, OmitType, PartialType } from "@nestjs/swagger";
+import { IsArray, IsNotEmpty, IsPositive, IsString } from "class-validator";
 
 export class CreatePedidoDto {
 
     @ApiProperty({description: 'Id asociado del Comprador'})
-    @IsPositive()
+    @IsString()
     @IsNotEmpty()
-    readonly compradorId: number;
+    readonly comprador: string;
+
+    @ApiProperty({description: 'Array de productos asociados'})
+    @IsArray()
+    @IsNotEmpty()
+    readonly productos: string[];
 
 };
 
-export class UpdatePedidoDto extends PartialType(CreatePedidoDto) {}
+export class UpdatePedidoDto extends PartialType( OmitType ( CreatePedidoDto, ['productos'] )) {};
+
+export class AddProductsToOrderDto {
+    
+    @IsArray()
+    @IsNotEmpty()
+    readonly productsIds: string[];
+
+};

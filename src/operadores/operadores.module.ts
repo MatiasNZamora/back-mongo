@@ -8,7 +8,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Comprador, CompradorSchema } from './entities/comprador.entity';
 import { Operador, OperadorSchema } from './entities/operador.entity';
 import { Pedido, PedidoSchema } from './entities/pedido.entity';
-import { DetallePedido, DetallePedidoSchema } from './entities/detalle-pedido.entity';
+import { PedidosService } from './services/pedido.service';
+import { PedidosController } from './controllers/pedido.controller';
 
 @Module({
   imports: [
@@ -26,13 +27,9 @@ import { DetallePedido, DetallePedidoSchema } from './entities/detalle-pedido.en
         name: Pedido.name,
         schema: PedidoSchema,
       },
-      {
-        name: DetallePedido.name,
-        schema: DetallePedidoSchema,
-      },
     ]),
   ],
-  controllers: [OperadoresController, CompradoresController],
-  providers: [OperadoresService, CompradoresService],
+  controllers: [OperadoresController, CompradoresController, PedidosController],
+  providers: [OperadoresService, CompradoresService, PedidosService],
 })
 export class OperadoresModule {}

@@ -17,16 +17,6 @@ export class OperadoresService {
     private configService: ConfigService, // Ya no utilizamos la variable global
   ) {}
 
-  // private counterId = 1;
-  // private operadores: Operador[] = [
-  //   {
-  //     id: 1,
-  //     email: 'operador@correo.com',
-  //     password: '123456',
-  //     role: 'admin',
-  //   },
-  // ];
-
   findAll() {
     return this.OperadorModel.find().exec();
   }
