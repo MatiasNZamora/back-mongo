@@ -1,20 +1,21 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
+import * as bcrypt from 'bcrypt';
 
 import { Operador } from '../entities/operador.entity';
-import { Pedido } from '../entities/pedido.entity';
 import { CreateOperadorDto, UpdateOperadorDto } from '../dtos/operador.dto';
 
 import { ProductosService } from './../../productos/services/productos.service';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+
 
 @Injectable()
 export class OperadoresService {
   constructor(
     @InjectModel( Operador.name ) private OperadorModel: Model<Operador>,
     private productsService: ProductosService,
-    private configService: ConfigService, // Ya no utilizamos la variable global
   ) {}
 
   findAll() {
@@ -29,9 +30,18 @@ export class OperadoresService {
     return operador;
   } 
 
-  create(data: CreateOperadorDto) {
+  findByEmail( email: string ){
+    return this.OperadorModel.findOne({email}).exec();
+  }
+
+  async create(data: CreateOperadorDto) {
     const newOperador = new this.OperadorModel(data);
-    return newOperador.save();
+    const hashPassword = await bcrypt.hash(newOperador.password, 10);
+    newOperador.password = hashPassword;
+    const operador = await newOperador.save();
+    const { password, ...rta } = operador.toJSON();
+    
+    return rta; 
   }
 
   update(id: string, changes: UpdateOperadorDto) {
@@ -49,10 +59,10 @@ export class OperadoresService {
   }
 
   async getOrderByUser(id: string) {
-    const user = this.findOne(id);
+    const comprador = this.findOne(id);
     return {
       date: new Date(),
-      user,
+      comprador,
       products: await this.productsService.findAll(),
     };
   }
