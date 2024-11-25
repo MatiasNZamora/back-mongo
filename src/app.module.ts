@@ -17,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
 //const APIKEYPROD = 'PROD-12345';
 
 import { enviroments } from './enviroments';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 
 import * as Joi from 'joi';
@@ -39,6 +40,7 @@ import * as Joi from 'joi';
     OperadoresModule,
     ProductosModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   //providers: [AppService], // agregamos una variable y desglosamos para tener dos atributos en providers

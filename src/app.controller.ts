@@ -1,6 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+
 import { AppService } from './app.service';
 
+import { ApikeyGuard } from './auth/guards/apikey.guard';
+import { Public } from './auth/decorators/public.decorator';
+
+@UseGuards(ApikeyGuard)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -16,9 +21,10 @@ export class AppController {
     return this.appService.getUseFactory();
   }
 
+  @Public()
   @Get('operativo')
   getEstoyFuncionando(): string {
-    return 'Me siento OK!!';
+    return 'Metodo para probar guardian';
   }
 
   @Get('/estoyok/') // En Express daría problemas...
@@ -29,5 +35,10 @@ export class AppController {
   @Get('/tasks/')
   getTasks() {
     return this.appService.getTasks();
+  }
+
+  @Get('nuevo')
+  newEndPoint(){
+    return 'Auth';
   }
 }
