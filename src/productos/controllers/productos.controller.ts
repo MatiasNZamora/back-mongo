@@ -23,15 +23,15 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/roles.model';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
-//TODO: FIXEAR EL JWTOKEN no me reconoce el token.
 
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Productos')
 @Controller('productos')
 export class ProductosController {
   constructor(private productsService: ProductosService) {}
 
-  @Public()
+  // @Public()
+  @Roles(Role.ADMIN)
   @Get()
   @ApiOperation({ summary: 'Registros de productos' })
   getProducts(@Query() params: FilterProductsDto) {
